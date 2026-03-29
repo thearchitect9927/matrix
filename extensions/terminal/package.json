@@ -1,0 +1,44 @@
+{
+  "name": "@matrix/terminal",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Embedded terminal extension with PTY support",
+  "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:terminal",
+    "name": "Terminal",
+    "icon": "terminal",
+    "description": "Embedded terminal with PTY support",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "terminal",
+          "section": "agent",
+          "label": "Terminal",
+          "icon": "terminal",
+          "order": 2,
+          "defaultView": "terminal-manager"
+        }
+      ],
+      "views": [
+        {
+          "id": "terminal-manager",
+          "area": "bottom",
+          "label": "Terminal"
+        }
+      ],
+      "commands": [
+        {
+          "id": "terminal.new-session",
+          "label": "New Terminal Session"
+        }
+      ]
+    },
+    "activationEvents": [
+      "*"
+    ]
+  },
+  "dependencies": {
+    "@matrix/core": "workspace:*"
+  }
+}

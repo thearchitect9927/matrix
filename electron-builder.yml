@@ -1,0 +1,80 @@
+appId: com.matrix.app
+productName: Matrix
+copyright: Copyright © 2026 Matrix
+artifactName: '${productName}-${version}-${arch}.${ext}'
+
+# node-pty is already rebuilt by postinstall (electron-rebuild -f -w node-pty)
+# Disable electron-builder's own rebuild to avoid distutils issues on Python 3.12+
+npmRebuild: false
+asar: true
+asarUnpack:
+  - '**/node_modules/node-pty/**/*'
+
+directories:
+  output: dist
+  buildResources: resources
+
+files:
+  - out/**/*
+  - package.json
+  - node_modules/node-pty/**/*
+  - node_modules/nan/**/*
+  - '!node_modules/@matrix/**'
+  - '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}'
+  - '!**/node_modules/.bin'
+
+# macOS
+mac:
+  category: public.app-category.developer-tools
+  target:
+    - target: dmg
+      arch: [arm64]
+    - target: zip
+      arch: [arm64]
+  # icon: resources/icon.icns  # Add app icon here
+  hardenedRuntime: false
+  gatekeeperAssess: false
+
+dmg:
+  sign: false
+  contents:
+    - x: 410
+      y: 150
+      type: link
+      path: /Applications
+    - x: 130
+      y: 150
+      type: file
+
+# Windows
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: true
+  perMachine: false
+  allowToChangeInstallationDirectory: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Matrix
+
+# Linux
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  category: Development
+  maintainer: thearchitect9927@gmail.com
+
+appImage:
+  license: null
+
+# GitHub Releases
+publish:
+  provider: github
+  owner: matrix-crew
+  repo: matrix

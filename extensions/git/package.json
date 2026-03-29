@@ -1,0 +1,45 @@
+{
+  "name": "@matrix/git",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Git operations: branches, worktrees, status, diff",
+  "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:git",
+    "name": "Git",
+    "icon": "git-branch",
+    "description": "Git operations: branches, worktrees, status",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "git-branches",
+          "section": "source",
+          "label": "Branches",
+          "icon": "git-branch",
+          "order": 2,
+          "defaultView": "git-branches"
+        }
+      ],
+      "views": [
+        {
+          "id": "git-branches",
+          "area": "main",
+          "label": "Branches"
+        }
+      ],
+      "commands": [
+        {
+          "id": "git.create-worktree",
+          "label": "Create Worktree"
+        }
+      ]
+    },
+    "activationEvents": [
+      "onView:git-branches"
+    ]
+  },
+  "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/workspace": "workspace:*"
+  }
+}
