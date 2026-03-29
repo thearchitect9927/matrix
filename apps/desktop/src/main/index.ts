@@ -5,6 +5,9 @@ import { setupIPCHandlers } from './ipc';
 import { setupSystemCheckHandlers } from './system-check';
 import { setupTerminalHandlers } from './terminal-manager';
 import { initializeAppPaths } from './app-paths';
+import { NodeExtensionHost } from './node-extension-host';
+import { discoverExtensions } from './extension-discovery';
+import { registerExtensionIPC } from './extension-ipc';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -46,7 +49,7 @@ function createWindow(): void {
 }
 
 // App lifecycle handlers
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Initialize application paths (DB + workspace directories)
   initializeAppPaths();
 
@@ -61,6 +64,12 @@ app.whenReady().then(() => {
 
   // Initialize terminal PTY handlers
   setupTerminalHandlers();
+
+  // Initialize Extension system
+  const extensions = await discoverExtensions();
+  registerExtensionIPC(extensions);
+  const nodeExtHost = new NodeExtensionHost();
+  await nodeExtHost.initialize(extensions);
 
   createWindow();
 

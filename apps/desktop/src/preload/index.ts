@@ -14,6 +14,11 @@ import type { IPCMessage, IPCResponse } from '@shared/types/ipc';
 
 // Expose IPC API to renderer process via context bridge
 contextBridge.exposeInMainWorld('api', {
+  // Extension IPC bridge — generic invoke for Extension handlers
+  invoke: (channel: string, ...args: unknown[]): Promise<unknown> => {
+    return ipcRenderer.invoke(channel, ...args);
+  },
+
   /**
    * Send an IPC message to the Python backend via the main process
    * @param message - The IPC message to send
