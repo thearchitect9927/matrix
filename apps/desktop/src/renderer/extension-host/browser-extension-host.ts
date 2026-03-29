@@ -13,6 +13,7 @@ export class BrowserExtensionHost {
   readonly registry = new ExtensionRegistry();
   private frontends = new Map<string, BrowserExtensionModule>();
   private extensions = new Map<string, ExtensionInfo>();
+  private activationPromises = new Map<string, Promise<void>>();
 
   /**
    * 앱 시작 시 호출 — manifest 등록 + 모듈 로드
@@ -51,7 +52,21 @@ export class BrowserExtensionHost {
    */
   async activate(extensionId: string): Promise<void> {
     if (this.registry.isActivated(extensionId)) return;
+    if (this.activationPromises.has(extensionId)) {
+      return this.activationPromises.get(extensionId);
+    }
 
+    const promise = this.doActivate(extensionId);
+    this.activationPromises.set(extensionId, promise);
+
+    try {
+      await promise;
+    } finally {
+      this.activationPromises.delete(extensionId);
+    }
+  }
+
+  private async doActivate(extensionId: string): Promise<void> {
     const frontend = this.frontends.get(extensionId);
     if (frontend?.activate) {
       const ext = this.extensions.get(extensionId);
@@ -61,15 +76,9 @@ export class BrowserExtensionHost {
       await frontend.activate(api, context);
     }
 
-    // node 쪽도 activate (preload 경유)
-    // TODO: Phase 1에서 preload에 extension API 추가 후 연결
-
     this.registry.markActivated(extensionId);
   }
 
-  /**
-   * Extension이 activate 되도록 보장 (이미 되어있으면 스킵)
-   */
   async ensureActivated(extensionId: string): Promise<void> {
     if (!this.registry.isActivated(extensionId)) {
       await this.activate(extensionId);

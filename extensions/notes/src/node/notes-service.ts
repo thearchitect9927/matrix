@@ -5,6 +5,14 @@ import type { Note } from '../common/types';
 
 const matrixService = new MatrixService();
 
+function validateNotePath(notesDir: string, filename: string): string {
+  const resolved = path.resolve(notesDir, filename);
+  if (!resolved.startsWith(notesDir + path.sep) && resolved !== notesDir) {
+    throw new Error('Invalid filename: path traversal detected');
+  }
+  return resolved;
+}
+
 export class NotesService {
   async list(matrixId: string): Promise<Note[]> {
     const matrixPath = await matrixService.getPath(matrixId);
@@ -43,7 +51,8 @@ export class NotesService {
     const matrixPath = await matrixService.getPath(matrixId);
     if (!matrixPath) return null;
 
-    const filePath = path.join(matrixPath, 'notes', filename);
+    const notesDir = path.join(matrixPath, 'notes');
+    const filePath = validateNotePath(notesDir, filename);
     try {
       const stat = await fs.stat(filePath);
       const content = await fs.readFile(filePath, 'utf-8');
@@ -66,7 +75,8 @@ export class NotesService {
 
     const notesDir = path.join(matrixPath, 'notes');
     await fs.mkdir(notesDir, { recursive: true });
-    await fs.writeFile(path.join(notesDir, filename), content, 'utf-8');
+    const filePath = validateNotePath(notesDir, filename);
+    await fs.writeFile(filePath, content, 'utf-8');
   }
 
   async create(matrixId: string, title: string): Promise<Note> {
@@ -91,7 +101,9 @@ export class NotesService {
     if (!matrixPath) return false;
 
     try {
-      await fs.unlink(path.join(matrixPath, 'notes', filename));
+      const notesDir = path.join(matrixPath, 'notes');
+      const filePath = validateNotePath(notesDir, filename);
+      await fs.unlink(filePath);
       return true;
     } catch {
       return false;

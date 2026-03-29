@@ -23,6 +23,7 @@ type CommandHandler = (...args: unknown[]) => unknown;
  */
 export class ExtensionRegistry {
   private manifests = new Map<string, Manifest>();
+  private dynamicSidebarItems: RegisteredSidebarItem[] = [];
   private viewComponents = new Map<string, ComponentType<Record<string, unknown>>>();
   private commandHandlers = new Map<string, CommandHandler>();
   private activatedExtensions = new Set<string>();
@@ -54,7 +55,12 @@ export class ExtensionRegistry {
         items.push({ ...item, extensionId: manifest.id });
       }
     }
+    items.push(...this.dynamicSidebarItems);
     return items.sort((a, b) => a.order - b.order);
+  }
+
+  registerDynamicSidebarItem(item: RegisteredSidebarItem): void {
+    this.dynamicSidebarItems.push(item);
   }
 
   // --- View Contributions ---

@@ -24,12 +24,7 @@ export function createBrowserAPI(
 
     sidebar: {
       register(item) {
-        // manifest 외에 동적으로 추가할 때
-        const manifest = registry.getManifest(extensionId);
-        if (manifest) {
-          if (!manifest.contributions.sidebar) manifest.contributions.sidebar = [];
-          manifest.contributions.sidebar.push(item);
-        }
+        registry.registerDynamicSidebarItem({ ...item, extensionId });
       },
       onSelect(itemId, handler) {
         return registry.onSidebarSelect(itemId, handler);

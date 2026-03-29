@@ -6,10 +6,10 @@ import type {
   ExtensionContext,
 } from '@matrix/core';
 import fs from 'fs/promises';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 /**
  * NodeExtensionHost — main process에서 Extension 백엔드를 관리
@@ -18,6 +18,7 @@ export class NodeExtensionHost {
   private backends = new Map<string, NodeExtensionModule>();
   private extensions = new Map<string, ExtensionInfo>();
   private activated = new Set<string>();
+  private activationPromises = new Map<string, Promise<void>>();
 
   constructor() {
     // renderer에서 extension:activate IPC를 받으면 node 쪽도 activate
@@ -52,7 +53,21 @@ export class NodeExtensionHost {
 
   async activate(extensionId: string): Promise<void> {
     if (this.activated.has(extensionId)) return;
+    if (this.activationPromises.has(extensionId)) {
+      return this.activationPromises.get(extensionId);
+    }
 
+    const promise = this.doActivate(extensionId);
+    this.activationPromises.set(extensionId, promise);
+
+    try {
+      await promise;
+    } finally {
+      this.activationPromises.delete(extensionId);
+    }
+  }
+
+  private async doActivate(extensionId: string): Promise<void> {
     const backend = this.backends.get(extensionId);
     if (backend?.activate) {
       const ext = this.extensions.get(extensionId);
@@ -125,23 +140,27 @@ export class NodeExtensionHost {
 
       git: {
         async clone(url: string, dest: string, options?: { bare?: boolean }) {
-          const bareFlag = options?.bare ? ' --bare' : '';
-          await execAsync(`git clone${bareFlag} ${url} ${dest}`);
+          const args = ['clone', ...(options?.bare ? ['--bare'] : []), url, dest];
+          await execFileAsync('git', args);
         },
         async worktreeAdd(repo: string, dest: string, branch: string) {
-          await execAsync(`git worktree add ${dest} -b ${branch}`, { cwd: repo });
+          await execFileAsync('git', ['worktree', 'add', dest, '-b', branch], { cwd: repo });
         },
         async worktreeRemove(worktreePath: string) {
-          await execAsync(`git worktree remove ${worktreePath} --force`);
+          await execFileAsync('git', ['worktree', 'remove', worktreePath, '--force']);
         },
         async worktreeList(repo: string) {
-          const { stdout } = await execAsync('git worktree list --porcelain', { cwd: repo });
+          const { stdout } = await execFileAsync('git', ['worktree', 'list', '--porcelain'], {
+            cwd: repo,
+          });
           return parseWorktreeList(stdout);
         },
         async branchList(repo: string) {
-          const { stdout } = await execAsync('git branch --format="%(refname:short) %(HEAD)"', {
-            cwd: repo,
-          });
+          const { stdout } = await execFileAsync(
+            'git',
+            ['branch', '--format=%(refname:short) %(HEAD)'],
+            { cwd: repo }
+          );
           return stdout
             .trim()
             .split('\n')
@@ -152,7 +171,9 @@ export class NodeExtensionHost {
             });
         },
         async status(repo: string) {
-          const { stdout } = await execAsync('git status --porcelain -b', { cwd: repo });
+          const { stdout } = await execFileAsync('git', ['status', '--porcelain', '-b'], {
+            cwd: repo,
+          });
           return parseGitStatus(stdout);
         },
       },
@@ -160,7 +181,8 @@ export class NodeExtensionHost {
       shell: {
         async exec(command: string, options?) {
           try {
-            const { stdout, stderr } = await execAsync(command, {
+            const args = ['-c', command];
+            const { stdout, stderr } = await execFileAsync('/bin/sh', args, {
               cwd: options?.cwd,
               env: options?.env ? { ...process.env, ...options.env } : undefined,
               timeout: options?.timeout,

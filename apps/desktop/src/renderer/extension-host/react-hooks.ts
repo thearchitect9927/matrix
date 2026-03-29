@@ -32,7 +32,7 @@ interface ActiveViewState {
   props: Record<string, unknown>;
 }
 
-const activeViewState: ActiveViewState = { viewId: null, props: {} };
+let activeViewState: ActiveViewState = { viewId: null, props: {} };
 const activeViewListeners = new Set<() => void>();
 
 function notifyActiveViewChange() {
@@ -40,8 +40,7 @@ function notifyActiveViewChange() {
 }
 
 export function setActiveView(viewId: string, props: Record<string, unknown> = {}): void {
-  activeViewState.viewId = viewId;
-  activeViewState.props = props;
+  activeViewState = { viewId, props };
   notifyActiveViewChange();
 }
 

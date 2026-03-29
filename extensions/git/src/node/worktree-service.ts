@@ -1,29 +1,31 @@
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import type { Worktree } from '../common/types';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export class WorktreeService {
   async add(repoPath: string, destination: string, branch: string): Promise<void> {
-    await execAsync(`git worktree add "${destination}" -b "${branch}"`, { cwd: repoPath });
+    await execFileAsync('git', ['worktree', 'add', destination, '-b', branch], { cwd: repoPath });
   }
 
   async addExisting(repoPath: string, destination: string, branch: string): Promise<void> {
-    await execAsync(`git worktree add "${destination}" "${branch}"`, { cwd: repoPath });
+    await execFileAsync('git', ['worktree', 'add', destination, branch], { cwd: repoPath });
   }
 
   async remove(worktreePath: string): Promise<void> {
-    await execAsync(`git worktree remove "${worktreePath}" --force`);
+    await execFileAsync('git', ['worktree', 'remove', worktreePath, '--force']);
   }
 
   async list(repoPath: string): Promise<Worktree[]> {
-    const { stdout } = await execAsync('git worktree list --porcelain', { cwd: repoPath });
+    const { stdout } = await execFileAsync('git', ['worktree', 'list', '--porcelain'], {
+      cwd: repoPath,
+    });
     return this.parseWorktreeList(stdout);
   }
 
   async prune(repoPath: string): Promise<void> {
-    await execAsync('git worktree prune', { cwd: repoPath });
+    await execFileAsync('git', ['worktree', 'prune'], { cwd: repoPath });
   }
 
   private parseWorktreeList(output: string): Worktree[] {

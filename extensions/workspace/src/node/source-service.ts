@@ -1,9 +1,9 @@
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import type { MatrixService } from './matrix-service';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export class SourceService {
   constructor(private matrixService: MatrixService) {}
@@ -13,17 +13,14 @@ export class SourceService {
     if (!matrixPath) throw new Error(`Matrix not found: ${matrixId}`);
 
     const repoDir = path.join(matrixPath, 'repositories', `${name}.git`);
-    await execAsync(`git clone --bare ${url} "${repoDir}"`);
+    await execFileAsync('git', ['clone', '--bare', url, repoDir]);
 
-    // Add to .matrix.json
     await this.matrixService.addRepository(matrixId, { name, url });
 
     return repoDir;
   }
 
   async extractRepoName(url: string): Promise<string> {
-    // git@github.com:user/repo.git -> repo
-    // https://github.com/user/repo.git -> repo
     const match = url.match(/\/([^/]+?)(?:\.git)?$/);
     return match?.[1] ?? 'unknown';
   }

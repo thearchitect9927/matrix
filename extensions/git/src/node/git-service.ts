@@ -1,12 +1,12 @@
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import type { Branch, GitStatus } from '../common/types';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export class GitService {
   async branchList(repoPath: string): Promise<Branch[]> {
-    const { stdout } = await execAsync('git branch --format="%(refname:short) %(HEAD)"', {
+    const { stdout } = await execFileAsync('git', ['branch', '--format=%(refname:short) %(HEAD)'], {
       cwd: repoPath,
     });
     return stdout
@@ -20,7 +20,9 @@ export class GitService {
   }
 
   async status(repoPath: string): Promise<GitStatus> {
-    const { stdout } = await execAsync('git status --porcelain -b', { cwd: repoPath });
+    const { stdout } = await execFileAsync('git', ['status', '--porcelain', '-b'], {
+      cwd: repoPath,
+    });
     const lines = stdout.trim().split('\n');
     const branchLine = lines[0] ?? '';
     const branch = branchLine.replace('## ', '').split('...')[0];
@@ -47,8 +49,10 @@ export class GitService {
     repoPath: string,
     limit: number = 20
   ): Promise<Array<{ hash: string; message: string; author: string; date: string }>> {
-    const { stdout } = await execAsync(
-      `git log --oneline --format="%H|||%s|||%an|||%ai" -${limit}`,
+    const safeLimit = Math.max(1, Math.min(Math.floor(limit), 1000));
+    const { stdout } = await execFileAsync(
+      'git',
+      ['log', '--oneline', '--format=%H|||%s|||%an|||%ai', `-${safeLimit}`],
       { cwd: repoPath }
     );
     return stdout
@@ -62,8 +66,8 @@ export class GitService {
   }
 
   async diff(repoPath: string, file?: string): Promise<string> {
-    const fileArg = file ? ` -- ${file}` : '';
-    const { stdout } = await execAsync(`git diff${fileArg}`, { cwd: repoPath });
+    const args = ['diff', ...(file ? ['--', file] : [])];
+    const { stdout } = await execFileAsync('git', args, { cwd: repoPath });
     return stdout;
   }
 }
