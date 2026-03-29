@@ -3,6 +3,7 @@ import type { Matrix } from '../common/types';
 
 interface MatrixCardProps {
   matrix: Matrix;
+  onSelect: () => void;
   onDelete: () => void;
 }
 
@@ -23,9 +24,12 @@ function formatTimeAgo(dateStr: string): string {
   return `${diffMonths} months ago`;
 }
 
-export function MatrixCard({ matrix, onDelete }: MatrixCardProps) {
+export function MatrixCard({ matrix, onSelect, onDelete }: MatrixCardProps) {
   return (
-    <div className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-white/5 p-5 text-left transition-all hover:border-white/20 hover:bg-white/[0.07]">
+    <div
+      onClick={onSelect}
+      className="group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 bg-white/5 p-5 text-left transition-all hover:border-white/20 hover:bg-white/[0.07]"
+    >
       <div className="mb-4 flex items-start justify-between">
         <div className="min-w-0">
           <h3 className="truncate text-[15px] font-semibold text-white">{matrix.name}</h3>

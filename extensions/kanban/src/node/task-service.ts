@@ -2,9 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { randomUUID } from 'crypto';
 import type { Task, KanbanBoard, KanbanCard } from '../common/types';
-import { MatrixService } from '@matrix/workspace/src/node/matrix-service';
-
-const matrixService = new MatrixService();
+import { matrixService } from '@matrix/workspace/src/node/backend';
 
 function slugify(text: string): string {
   return text

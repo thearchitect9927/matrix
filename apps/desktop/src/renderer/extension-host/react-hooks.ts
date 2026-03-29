@@ -66,3 +66,27 @@ export function useViewComponent(
   if (!viewId) return null;
   return registry.getViewComponent(viewId) ?? null;
 }
+
+// --- Current Matrix ---
+
+let currentMatrixId: string | null = null;
+const matrixListeners = new Set<() => void>();
+
+function notifyMatrixChange() {
+  for (const listener of matrixListeners) listener();
+}
+
+export function setCurrentMatrix(matrixId: string | null): void {
+  currentMatrixId = matrixId;
+  notifyMatrixChange();
+}
+
+export function useCurrentMatrixId(): string | null {
+  return useSyncExternalStore(
+    (callback) => {
+      matrixListeners.add(callback);
+      return () => matrixListeners.delete(callback);
+    },
+    () => currentMatrixId
+  );
+}

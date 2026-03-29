@@ -1,12 +1,9 @@
 import path from 'path';
 import fs from 'fs/promises';
-import { MatrixService } from '@matrix/workspace/src/node/matrix-service';
-import { WorktreeService } from '@matrix/git/src/node/worktree-service';
+import { matrixService } from '@matrix/workspace/src/node/backend';
+import { worktreeService } from '@matrix/git/src/node/backend';
 import { AgentService } from './agent-service';
-import type { Matrix } from '@matrix/workspace/src/common/types';
 
-const matrixService = new MatrixService();
-const worktreeService = new WorktreeService();
 const agentService = new AgentService();
 
 interface TaskExecutionPlan {

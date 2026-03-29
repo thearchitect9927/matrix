@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { join } from 'path';
 import { setupDialogHandlers } from './dialogs';
 // Legacy Python IPC — kept for backward compatibility during migration
@@ -66,6 +66,13 @@ app.whenReady().then(async () => {
 
   // Initialize terminal PTY handlers
   setupTerminalHandlers();
+
+  // Utility IPC handlers
+  ipcMain.handle('shell:open-external', async (_e, url: string) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      await shell.openExternal(url);
+    }
+  });
 
   // Initialize Extension system
   const extensions = await discoverExtensions();

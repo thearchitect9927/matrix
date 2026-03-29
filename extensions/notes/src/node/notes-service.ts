@@ -1,9 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { MatrixService } from '@matrix/workspace/src/node/matrix-service';
+import { matrixService } from '@matrix/workspace/src/node/backend';
 import type { Note } from '../common/types';
-
-const matrixService = new MatrixService();
 
 function validateNotePath(notesDir: string, filename: string): string {
   const resolved = path.resolve(notesDir, filename);

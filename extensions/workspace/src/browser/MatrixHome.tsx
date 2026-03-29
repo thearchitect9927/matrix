@@ -3,7 +3,11 @@ import type { Matrix } from '../common/types';
 import { MatrixCard } from './MatrixCard';
 import { CreateMatrixCard } from './CreateMatrixCard';
 
-export function MatrixHome() {
+interface MatrixHomeProps {
+  onSelectMatrix?: (matrixId: string) => void;
+}
+
+export function MatrixHome({ onSelectMatrix }: MatrixHomeProps) {
   const [matrices, setMatrices] = useState<Matrix[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -65,7 +69,12 @@ export function MatrixHome() {
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {matrices.map((matrix) => (
-            <MatrixCard key={matrix.id} matrix={matrix} onDelete={() => handleDelete(matrix.id)} />
+            <MatrixCard
+              key={matrix.id}
+              matrix={matrix}
+              onSelect={() => onSelectMatrix?.(matrix.id)}
+              onDelete={() => handleDelete(matrix.id)}
+            />
           ))}
           <CreateMatrixCard onClick={handleCreate} />
         </div>

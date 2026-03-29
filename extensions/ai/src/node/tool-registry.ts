@@ -1,11 +1,7 @@
 import type { AgentTool } from '../common/types';
-import { MatrixService } from '@matrix/workspace/src/node/matrix-service';
-import { WorktreeService } from '@matrix/git/src/node/worktree-service';
-import { TaskService } from '@matrix/kanban/src/node/task-service';
-
-const matrixService = new MatrixService();
-const worktreeService = new WorktreeService();
-const taskService = new TaskService();
+import { matrixService } from '@matrix/workspace/src/node/backend';
+import { worktreeService } from '@matrix/git/src/node/backend';
+import { taskService } from '@matrix/kanban/src/node/backend';
 
 export function getBuiltinTools(): AgentTool[] {
   return [

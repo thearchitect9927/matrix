@@ -9,15 +9,17 @@ const COLUMNS: { id: TaskStatus; label: string }[] = [
   { id: 'done', label: 'Done' },
 ];
 
-export function KanbanBoard() {
+interface KanbanBoardProps {
+  matrixId?: string | null;
+}
+
+export function KanbanBoard({ matrixId }: KanbanBoardProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [board, setBoard] = useState<KanbanBoardType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // TODO: get current matrixId from context
-  const matrixId = 'current';
-
   const fetchData = useCallback(async () => {
+    if (!matrixId) return;
     try {
       setIsLoading(true);
       const [taskList, kanban] = await Promise.all([
@@ -57,6 +59,14 @@ export function KanbanBoard() {
       console.error('Failed to move task:', err);
     }
   };
+
+  if (!matrixId) {
+    return (
+      <div className="flex h-full items-center justify-center text-white/40">
+        Select a Matrix from Home to view the Kanban board.
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

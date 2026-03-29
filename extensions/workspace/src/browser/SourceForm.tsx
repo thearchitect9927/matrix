@@ -13,19 +13,13 @@ export function SourceForm({ matrixId, onComplete, onCancel }: SourceFormProps) 
   const [isCloning, setIsCloning] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleUrlChange = async (newUrl: string) => {
+  const handleUrlChange = (newUrl: string) => {
     setUrl(newUrl);
     setError(null);
     if (newUrl.trim()) {
-      try {
-        const extracted = (await window.api.invoke(
-          'workspace:source:extract-name',
-          newUrl
-        )) as string;
-        setName(extracted);
-      } catch {
-        // keep manual name
-      }
+      // Extract repo name locally — no IPC needed
+      const match = newUrl.match(/\/([^/]+?)(?:\.git)?$/);
+      if (match?.[1]) setName(match[1]);
     }
   };
 

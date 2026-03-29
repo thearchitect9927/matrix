@@ -18,15 +18,20 @@ export function DashboardSourceCard({ repo }: DashboardSourceCardProps) {
         </div>
       </div>
       {repo.url && (
-        <a
-          href={repo.url.replace(/\.git$/, '')}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
           className="text-white/30 hover:text-white/60"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            // Use Electron shell.openExternal via IPC
+            const url = repo.url.replace(/\.git$/, '');
+            window.api.invoke('shell:open-external', url).catch(() => {
+              // Fallback: copy to clipboard
+              navigator.clipboard.writeText(url);
+            });
+          }}
         >
           <ExternalLink size={14} />
-        </a>
+        </button>
       )}
     </div>
   );
