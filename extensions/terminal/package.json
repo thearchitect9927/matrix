@@ -1,0 +1,10 @@
+{
+  "name": "@matrix/terminal",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Embedded terminal extension with PTY support",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*"
+  }
+}

@@ -187,7 +187,9 @@ export class NodeExtensionHost {
     const moduleMap: Record<string, () => Promise<NodeExtensionModule>> = {
       '@matrix/hello-world': () => import('@matrix/hello-world/src/node/backend'),
       '@matrix/workspace': () => import('@matrix/workspace/src/node/backend'),
-      // Phase 2+ 에서 추가
+      '@matrix/terminal': () => import('@matrix/terminal/src/node/backend'),
+      '@matrix/kanban': () => import('@matrix/kanban/src/node/backend'),
+      '@matrix/github': () => import('@matrix/github/src/node/backend'),
     };
 
     const loader = moduleMap[packageName];

@@ -1,0 +1,11 @@
+{
+  "name": "@matrix/github",
+  "version": "0.0.1",
+  "private": true,
+  "description": "GitHub PR and Issue integration via gh CLI",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/workspace": "workspace:*"
+  }
+}

@@ -65,9 +65,18 @@ importers:
       '@matrix/core':
         specifier: workspace:*
         version: link:../../extensions/core
+      '@matrix/github':
+        specifier: workspace:*
+        version: link:../../extensions/github
       '@matrix/hello-world':
         specifier: workspace:*
         version: link:../../extensions/hello-world
+      '@matrix/kanban':
+        specifier: workspace:*
+        version: link:../../extensions/kanban
+      '@matrix/terminal':
+        specifier: workspace:*
+        version: link:../../extensions/terminal
       '@matrix/workspace':
         specifier: workspace:*
         version: link:../../extensions/workspace
@@ -175,7 +184,31 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
+  extensions/github:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@matrix/workspace':
+        specifier: workspace:*
+        version: link:../workspace
+
   extensions/hello-world:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+
+  extensions/kanban:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@matrix/workspace':
+        specifier: workspace:*
+        version: link:../workspace
+
+  extensions/terminal:
     dependencies:
       '@matrix/core':
         specifier: workspace:*

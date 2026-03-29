@@ -21,11 +21,19 @@ async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
   const helloManifest = require('@matrix/hello-world/manifest.json') as Manifest;
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const workspaceManifest = require('@matrix/workspace/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const terminalManifest = require('@matrix/terminal/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const kanbanManifest = require('@matrix/kanban/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const githubManifest = require('@matrix/github/manifest.json') as Manifest;
 
   const builtinManifests: Array<{ packageName: string; manifest: Manifest }> = [
     { packageName: '@matrix/hello-world', manifest: helloManifest },
     { packageName: '@matrix/workspace', manifest: workspaceManifest },
-    // Phase 2+ 에서 추가
+    { packageName: '@matrix/terminal', manifest: terminalManifest },
+    { packageName: '@matrix/kanban', manifest: kanbanManifest },
+    { packageName: '@matrix/github', manifest: githubManifest },
   ];
 
   return builtinManifests.map(({ packageName, manifest }) => ({

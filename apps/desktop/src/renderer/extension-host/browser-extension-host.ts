@@ -82,9 +82,9 @@ export class BrowserExtensionHost {
     const moduleMap: Record<string, () => Promise<BrowserExtensionModule>> = {
       '@matrix/hello-world': () => import('@matrix/hello-world/src/browser/frontend'),
       '@matrix/workspace': () => import('@matrix/workspace/src/browser/frontend'),
-      // Phase 2+ 에서 추가
-      // '@matrix/kanban': () => import('@matrix/kanban/src/browser/frontend'),
-      // '@matrix/terminal': () => import('@matrix/terminal/src/browser/frontend'),
+      '@matrix/terminal': () => import('@matrix/terminal/src/browser/frontend'),
+      '@matrix/kanban': () => import('@matrix/kanban/src/browser/frontend'),
+      '@matrix/github': () => import('@matrix/github/src/browser/frontend'),
     };
 
     const loader = moduleMap[packageName];

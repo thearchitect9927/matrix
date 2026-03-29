@@ -1,0 +1,11 @@
+{
+  "name": "@matrix/kanban",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Kanban board and Task management extension",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/workspace": "workspace:*"
+  }
+}
