@@ -1,0 +1,17 @@
+{
+  "name": "my-matrix-extension",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A custom Matrix extension",
+  "main": "src/browser/frontend.ts",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "@matrix/core": "^0.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "typescript": "^5.7.3"
+  }
+}
