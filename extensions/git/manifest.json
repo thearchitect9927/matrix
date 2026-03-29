@@ -1,0 +1,35 @@
+{
+  "id": "matrix:git",
+  "name": "Git",
+  "version": "0.0.1",
+  "icon": "git-branch",
+  "description": "Git operations: branches, worktrees, status",
+
+  "contributions": {
+    "sidebar": [
+      {
+        "id": "git-branches",
+        "section": "source",
+        "label": "Branches",
+        "icon": "git-branch",
+        "order": 2,
+        "defaultView": "git-branches"
+      }
+    ],
+    "views": [
+      {
+        "id": "git-branches",
+        "area": "main",
+        "label": "Branches"
+      }
+    ],
+    "commands": [
+      {
+        "id": "git.create-worktree",
+        "label": "Create Worktree"
+      }
+    ]
+  },
+
+  "activationEvents": ["onView:git-branches"]
+}

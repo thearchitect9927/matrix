@@ -190,6 +190,9 @@ export class NodeExtensionHost {
       '@matrix/terminal': () => import('@matrix/terminal/src/node/backend'),
       '@matrix/kanban': () => import('@matrix/kanban/src/node/backend'),
       '@matrix/github': () => import('@matrix/github/src/node/backend'),
+      '@matrix/git': () => import('@matrix/git/src/node/backend'),
+      '@matrix/notes': () => import('@matrix/notes/src/node/backend'),
+      '@matrix/ai': () => import('@matrix/ai/src/node/backend'),
     };
 
     const loader = moduleMap[packageName];

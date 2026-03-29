@@ -1,0 +1,13 @@
+{
+  "name": "@matrix/ai",
+  "version": "0.0.1",
+  "private": true,
+  "description": "AI Agent with full Matrix context access",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/workspace": "workspace:*",
+    "@matrix/git": "workspace:*",
+    "@matrix/kanban": "workspace:*"
+  }
+}

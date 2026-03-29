@@ -1,0 +1,11 @@
+{
+  "name": "@matrix/git",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Git operations: branches, worktrees, status, diff",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/workspace": "workspace:*"
+  }
+}

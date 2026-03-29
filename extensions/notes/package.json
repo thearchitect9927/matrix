@@ -1,0 +1,11 @@
+{
+  "name": "@matrix/notes",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Project knowledge management with markdown notes",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/workspace": "workspace:*"
+  }
+}

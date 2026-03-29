@@ -62,9 +62,15 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@matrix/ai':
+        specifier: workspace:*
+        version: link:../../extensions/ai
       '@matrix/core':
         specifier: workspace:*
         version: link:../../extensions/core
+      '@matrix/git':
+        specifier: workspace:*
+        version: link:../../extensions/git
       '@matrix/github':
         specifier: workspace:*
         version: link:../../extensions/github
@@ -74,6 +80,9 @@ importers:
       '@matrix/kanban':
         specifier: workspace:*
         version: link:../../extensions/kanban
+      '@matrix/notes':
+        specifier: workspace:*
+        version: link:../../extensions/notes
       '@matrix/terminal':
         specifier: workspace:*
         version: link:../../extensions/terminal
@@ -175,6 +184,21 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@20.19.33)(jiti@2.6.1)(jsdom@28.0.0)(lightningcss@1.30.2)(yaml@2.8.2)
 
+  extensions/ai:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@matrix/git':
+        specifier: workspace:*
+        version: link:../git
+      '@matrix/kanban':
+        specifier: workspace:*
+        version: link:../kanban
+      '@matrix/workspace':
+        specifier: workspace:*
+        version: link:../workspace
+
   extensions/core:
     devDependencies:
       '@types/react':
@@ -183,6 +207,15 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
+
+  extensions/git:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@matrix/workspace':
+        specifier: workspace:*
+        version: link:../workspace
 
   extensions/github:
     dependencies:
@@ -200,6 +233,15 @@ importers:
         version: link:../core
 
   extensions/kanban:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@matrix/workspace':
+        specifier: workspace:*
+        version: link:../workspace
+
+  extensions/notes:
     dependencies:
       '@matrix/core':
         specifier: workspace:*

@@ -27,6 +27,12 @@ async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
   const kanbanManifest = require('@matrix/kanban/manifest.json') as Manifest;
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const githubManifest = require('@matrix/github/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const gitManifest = require('@matrix/git/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const notesManifest = require('@matrix/notes/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const aiManifest = require('@matrix/ai/manifest.json') as Manifest;
 
   const builtinManifests: Array<{ packageName: string; manifest: Manifest }> = [
     { packageName: '@matrix/hello-world', manifest: helloManifest },
@@ -34,6 +40,9 @@ async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
     { packageName: '@matrix/terminal', manifest: terminalManifest },
     { packageName: '@matrix/kanban', manifest: kanbanManifest },
     { packageName: '@matrix/github', manifest: githubManifest },
+    { packageName: '@matrix/git', manifest: gitManifest },
+    { packageName: '@matrix/notes', manifest: notesManifest },
+    { packageName: '@matrix/ai', manifest: aiManifest },
   ];
 
   return builtinManifests.map(({ packageName, manifest }) => ({

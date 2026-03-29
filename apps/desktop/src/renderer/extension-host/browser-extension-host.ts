@@ -85,6 +85,9 @@ export class BrowserExtensionHost {
       '@matrix/terminal': () => import('@matrix/terminal/src/browser/frontend'),
       '@matrix/kanban': () => import('@matrix/kanban/src/browser/frontend'),
       '@matrix/github': () => import('@matrix/github/src/browser/frontend'),
+      '@matrix/git': () => import('@matrix/git/src/browser/frontend'),
+      '@matrix/notes': () => import('@matrix/notes/src/browser/frontend'),
+      '@matrix/ai': () => import('@matrix/ai/src/browser/frontend'),
     };
 
     const loader = moduleMap[packageName];
