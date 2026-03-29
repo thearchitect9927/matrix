@@ -1,0 +1,35 @@
+{
+  "id": "matrix:hello-world",
+  "name": "Hello World",
+  "version": "0.0.1",
+  "icon": "hand",
+  "description": "Extension 시스템 검증용 테스트 Extension",
+
+  "contributions": {
+    "sidebar": [
+      {
+        "id": "hello",
+        "section": "test",
+        "label": "Hello",
+        "icon": "hand",
+        "order": 1,
+        "defaultView": "hello-view"
+      }
+    ],
+    "views": [
+      {
+        "id": "hello-view",
+        "area": "main",
+        "label": "Hello World"
+      }
+    ],
+    "commands": [
+      {
+        "id": "hello.greet",
+        "label": "Say Hello"
+      }
+    ]
+  },
+
+  "activationEvents": ["onView:hello-view"]
+}

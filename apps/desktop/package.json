@@ -28,6 +28,8 @@
     "postinstall": "electron-rebuild -f -w node-pty"
   },
   "dependencies": {
+    "@matrix/core": "workspace:*",
+    "@matrix/hello-world": "workspace:*",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/addon-web-links": "^0.12.0",
     "@xterm/xterm": "^6.0.0",

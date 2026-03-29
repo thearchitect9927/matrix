@@ -1,0 +1,10 @@
+{
+  "name": "@matrix/hello-world",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Test extension for verifying the extension system",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*"
+  }
+}
