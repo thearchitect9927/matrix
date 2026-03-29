@@ -14,31 +14,14 @@ directories:
   output: dist
   buildResources: resources
 
-# Only include built output + runtime node_modules
-# electron-vite bundles everything except externalized deps (node-pty, python-shell)
 files:
   - out/**/*
   - package.json
   - node_modules/node-pty/**/*
-  - node_modules/python-shell/**/*
   - node_modules/nan/**/*
-  # Exclude everything else in node_modules
   - '!node_modules/@matrix/**'
   - '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}'
   - '!**/node_modules/.bin'
-
-# Backend source (shared across all platforms)
-extraResources:
-  - from: ../../apps/backend
-    to: backend
-    filter:
-      - 'src/**/*'
-      - 'pyproject.toml'
-      - 'uv.lock'
-      - '!**/__pycache__'
-      - '!**/*.pyc'
-      - '!tests/**'
-      - '!.venv/**'
 
 # macOS
 mac:
@@ -51,13 +34,6 @@ mac:
   # icon: resources/icon.icns  # Add app icon here
   hardenedRuntime: false
   gatekeeperAssess: false
-  # Code signing: uncomment when ready
-  # identity: "Developer ID Application: Your Name (TEAM_ID)"
-  extraResources:
-    - from: resources/python/darwin-${arch}
-      to: python
-    - from: resources/uv/darwin-${arch}
-      to: uv
 
 dmg:
   sign: false
@@ -75,15 +51,6 @@ win:
   target:
     - target: nsis
       arch: [x64]
-  # icon: resources/icon.ico  # Add app icon here
-  # Code signing: uncomment when ready
-  # certificateFile: path/to/cert.pfx
-  # certificatePassword: ${env.WINDOWS_CERT_PASSWORD}
-  extraResources:
-    - from: resources/python/win32-${arch}
-      to: python
-    - from: resources/uv/win32-${arch}
-      to: uv
 
 nsis:
   oneClick: true
@@ -102,12 +69,6 @@ linux:
       arch: [x64]
   category: Development
   maintainer: thearchitect9927@gmail.com
-  # icon: resources/icon.png  # Add app icon here (512x512 PNG)
-  extraResources:
-    - from: resources/python/linux-${arch}
-      to: python
-    - from: resources/uv/linux-${arch}
-      to: uv
 
 appImage:
   license: null
