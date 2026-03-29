@@ -1,9 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { join } from 'path';
 import { setupDialogHandlers } from './dialogs';
-// Legacy Python IPC — kept for backward compatibility during migration
-// TODO: Remove after all features migrated to Extension IPC
-import { setupIPCHandlers } from './ipc';
 import { setupSystemCheckHandlers } from './system-check';
 import { setupTerminalHandlers } from './terminal-manager';
 import { initializeAppPaths } from './app-paths';
@@ -54,9 +51,6 @@ function createWindow(): void {
 app.whenReady().then(async () => {
   // Initialize application paths (DB + workspace directories)
   initializeAppPaths();
-
-  // Initialize IPC handlers for Python backend communication
-  setupIPCHandlers();
 
   // Initialize system check handlers for onboarding & config
   setupSystemCheckHandlers();
