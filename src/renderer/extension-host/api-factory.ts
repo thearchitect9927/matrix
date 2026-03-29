@@ -2,8 +2,8 @@ import type { MatrixBrowserAPI, ExtensionContext } from '@matrix/core';
 import { ExtensionRegistry } from './registry';
 
 /**
- * Extension별로 scoped된 BrowserAPI 인스턴스를 생성한다.
- * 각 Extension은 자신의 API를 통해서만 Registry와 소통.
+ * Creates a scoped BrowserAPI instance for each Extension.
+ * Each Extension communicates with the Registry only through its own API.
  */
 export function createBrowserAPI(
   extensionId: string,

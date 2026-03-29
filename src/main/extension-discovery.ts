@@ -4,7 +4,7 @@ import path from 'path';
 import type { ExtensionInfo, Manifest } from '@matrix/core';
 
 /**
- * 내장 + 사용자 Extension을 탐색하여 ExtensionInfo 목록을 반환
+ * Discovers builtin and user Extensions and returns the ExtensionInfo list.
  */
 export async function discoverExtensions(): Promise<ExtensionInfo[]> {
   const builtin = await scanBuiltinExtensions();
@@ -16,7 +16,7 @@ export async function discoverExtensions(): Promise<ExtensionInfo[]> {
  * Builtin extensions: hardcoded list for Vite bundling compatibility
  */
 async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
-  // Phase 1+ 에서 Extension이 추가되면 여기에 등록
+  // Register new Extensions here as they are added in Phase 1+
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const helloManifest = require('@matrix/hello-world/manifest.json') as Manifest;
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -48,7 +48,7 @@ async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
   return builtinManifests.map(({ packageName, manifest }) => ({
     manifest,
     builtin: true,
-    path: '', // 내장은 번들에 포함되므로 경로 불필요
+    path: '', // Builtin extensions are included in the bundle, so path is not needed
     packageName,
   }));
 }
@@ -60,7 +60,7 @@ async function scanUserExtensions(): Promise<ExtensionInfo[]> {
   try {
     await fs.access(extensionsDir);
   } catch {
-    return []; // extensions 디렉토리 없으면 빈 목록
+    return []; // Return empty list if extensions directory doesn't exist
   }
 
   const dirs = await fs.readdir(extensionsDir, { withFileTypes: true });

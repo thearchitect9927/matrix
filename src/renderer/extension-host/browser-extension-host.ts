@@ -3,11 +3,11 @@ import { ExtensionRegistry } from './registry';
 import { createBrowserAPI, createExtensionContext } from './api-factory';
 
 /**
- * BrowserExtensionHost — renderer process에서 Extension을 관리
+ * BrowserExtensionHost — Manages Extensions in the renderer process.
  *
- * 1. manifest 수집 → Registry에 등록
- * 2. Extension 모듈 로드 (activate는 아직)
- * 3. 필요 시 lazy activate
+ * 1. Collect manifests and register them in the Registry
+ * 2. Load Extension modules (without activating yet)
+ * 3. Lazy activate on demand
  */
 export class BrowserExtensionHost {
   readonly registry = new ExtensionRegistry();
@@ -16,16 +16,16 @@ export class BrowserExtensionHost {
   private activationPromises = new Map<string, Promise<void>>();
 
   /**
-   * 앱 시작 시 호출 — manifest 등록 + 모듈 로드
+   * Called at app start — registers manifests and loads modules.
    */
   async initialize(extensions: ExtensionInfo[]): Promise<void> {
-    // 1. manifest 등록
+    // 1. Register manifests
     for (const ext of extensions) {
       this.extensions.set(ext.manifest.id, ext);
       this.registry.registerManifest(ext.manifest);
     }
 
-    // 2. 내장 Extension 모듈 로드
+    // 2. Load builtin Extension modules
     for (const ext of extensions) {
       if (ext.builtin) {
         try {
@@ -39,7 +39,7 @@ export class BrowserExtensionHost {
       }
     }
 
-    // 3. activationEvents: ["*"] 인 Extension은 즉시 activate
+    // 3. Immediately activate Extensions with activationEvents: ["*"]
     for (const ext of extensions) {
       if (ext.manifest.activationEvents?.includes('*')) {
         await this.activate(ext.manifest.id);
@@ -86,8 +86,8 @@ export class BrowserExtensionHost {
   }
 
   private async loadBuiltinModule(packageName: string): Promise<BrowserExtensionModule | null> {
-    // 내장 Extension은 빌드타임에 알려진 패키지이므로 dynamic import 사용
-    // Vite가 이 패턴을 번들링할 수 있도록 각 Extension을 명시적으로 등록
+    // Builtin Extensions are known at build time, so use dynamic import.
+    // Each Extension is explicitly registered so Vite can bundle this pattern.
     const moduleMap: Record<string, () => Promise<BrowserExtensionModule>> = {
       '@matrix/hello-world': () => import('@matrix/hello-world/src/browser/frontend'),
       '@matrix/workspace': () => import('@matrix/workspace/src/browser/frontend'),

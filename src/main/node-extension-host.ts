@@ -12,7 +12,7 @@ import { promisify } from 'util';
 const execFileAsync = promisify(execFile);
 
 /**
- * NodeExtensionHost — main process에서 Extension 백엔드를 관리
+ * NodeExtensionHost — Manages Extension backends in the main process.
  */
 export class NodeExtensionHost {
   private backends = new Map<string, NodeExtensionModule>();
@@ -21,7 +21,7 @@ export class NodeExtensionHost {
   private activationPromises = new Map<string, Promise<void>>();
 
   constructor() {
-    // renderer에서 extension:activate IPC를 받으면 node 쪽도 activate
+    // When receiving extension:activate IPC from the renderer, also activate on the node side
     ipcMain.handle('extension:activate', async (_event, extensionId: string) => {
       await this.activate(extensionId);
     });
@@ -43,7 +43,7 @@ export class NodeExtensionHost {
       }
     }
 
-    // activationEvents: ["*"] → 즉시 activate
+    // activationEvents: ["*"] -> immediately activate
     for (const ext of extensions) {
       if (ext.manifest.activationEvents?.includes('*')) {
         await this.activate(ext.manifest.id);

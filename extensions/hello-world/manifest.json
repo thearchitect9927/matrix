@@ -3,7 +3,7 @@
   "name": "Hello World",
   "version": "0.0.1",
   "icon": "hand",
-  "description": "Extension 시스템 검증용 테스트 Extension",
+  "description": "Test Extension for verifying the Extension system",
 
   "contributions": {
     "sidebar": [

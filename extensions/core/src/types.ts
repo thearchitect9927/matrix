@@ -7,32 +7,32 @@ import type { SidebarContribution } from './manifest';
 // ============================================================
 
 export interface ExtensionContext {
-  /** Extension 고유 ID */
+  /** Extension unique ID */
   extensionId: string;
-  /** Extension 루트 경로 */
+  /** Extension root path */
   extensionPath: string;
-  /** Disposable 등록 — deactivate 시 자동 정리 */
+  /** Register Disposables — automatically cleaned up on deactivate */
   subscriptions: Disposable[];
 }
 
 // ============================================================
-// Base API (browser + node 공통)
+// Base API (shared between browser + node)
 // ============================================================
 
 export interface MatrixBaseAPI {
-  /** 커맨드 등록/실행 */
+  /** Command registration/execution */
   commands: {
     register(commandId: string, handler: (...args: unknown[]) => unknown): Disposable;
     execute<T = unknown>(commandId: string, ...args: unknown[]): Promise<T>;
   };
 
-  /** Extension 간 이벤트 통신 */
+  /** Inter-Extension event communication */
   events: {
     on(event: string, handler: (...args: unknown[]) => void): Disposable;
     emit(event: string, ...args: unknown[]): void;
   };
 
-  /** Extension 로컬 상태 저장 (앱 재시작 후에도 유지) */
+  /** Extension local state storage (persists across app restarts) */
   storage: {
     get<T>(key: string): T | undefined;
     set(key: string, value: unknown): void;
@@ -40,24 +40,24 @@ export interface MatrixBaseAPI {
 }
 
 // ============================================================
-// Browser API (renderer process 전용)
+// Browser API (renderer process specific)
 // ============================================================
 
 export interface ViewsAPI {
-  /** 뷰 컴포넌트 등록 */
+  /** Register a view component */
   register(viewId: string, component: ComponentType<Record<string, unknown>>): void;
-  /** 뷰 열기 */
+  /** Open a view */
   open(viewId: string, props?: Record<string, unknown>): void;
-  /** 뷰 닫기 */
+  /** Close a view */
   close(viewId: string): void;
 }
 
 export interface SidebarAPI {
-  /** 사이드바 항목 등록 (manifest 외에 동적 추가 시) */
+  /** Register a sidebar item (for dynamic additions beyond the manifest) */
   register(item: SidebarContribution): void;
-  /** 사이드바 항목 선택 이벤트 */
+  /** Sidebar item select event */
   onSelect(itemId: string, handler: () => void): Disposable;
-  /** 사이드바 항목에 뱃지 표시 */
+  /** Display a badge on a sidebar item */
   setBadge(itemId: string, count: number): void;
 }
 
@@ -67,7 +67,7 @@ export interface MatrixBrowserAPI extends MatrixBaseAPI {
 }
 
 // ============================================================
-// Node API (main process 전용)
+// Node API (main process specific)
 // ============================================================
 
 export interface FileSystemAPI {

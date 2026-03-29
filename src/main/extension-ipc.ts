@@ -2,11 +2,11 @@ import { ipcMain } from 'electron';
 import type { ExtensionInfo } from '@matrix/core';
 
 /**
- * Extension 관련 IPC 핸들러 등록
- * renderer가 manifest 목록을 요청하면 main이 응답
+ * Registers Extension-related IPC handlers.
+ * Responds when the renderer requests the manifest list.
  */
 export function registerExtensionIPC(extensions: ExtensionInfo[]): void {
-  // renderer에서 앱 시작 시 Extension 목록 요청
+  // Renderer requests the Extension list at app start
   ipcMain.handle('extensions:list', () => {
     return extensions.map((ext) => ({
       manifest: ext.manifest,

@@ -13,13 +13,13 @@ export interface RegisteredView extends ViewContribution {
 type CommandHandler = (...args: unknown[]) => unknown;
 
 /**
- * Extension Registry — manifest contributions와 activate() 결과를 관리
+ * Extension Registry — Manages manifest contributions and activate() results.
  *
- * 라이프사이클:
- * 1. 앱 시작 → registerManifest() (sidebar/view/command contributions 수집)
- * 2. Shell이 getSidebarItems()로 사이드바 렌더링 (activate 불필요)
- * 3. 사용자 클릭 → ensureActivated() → activate()에서 registerView() 호출
- * 4. Shell이 getViewComponent()로 실제 React 컴포넌트 가져와서 렌더링
+ * Lifecycle:
+ * 1. App start -> registerManifest() (collect sidebar/view/command contributions)
+ * 2. Shell renders sidebar via getSidebarItems() (activation not needed)
+ * 3. User click -> ensureActivated() -> activate() calls registerView()
+ * 4. Shell retrieves actual React component via getViewComponent() and renders it
  */
 export class ExtensionRegistry {
   private manifests = new Map<string, Manifest>();
@@ -32,7 +32,7 @@ export class ExtensionRegistry {
   private eventHandlers = new Map<string, Set<(...args: unknown[]) => void>>();
   private storageData = new Map<string, Map<string, unknown>>();
 
-  // --- Manifest Registration (앱 시작 시) ---
+  // --- Manifest Registration (at app start) ---
 
   registerManifest(manifest: Manifest): void {
     this.manifests.set(manifest.id, manifest);

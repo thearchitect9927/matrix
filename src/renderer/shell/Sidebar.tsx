@@ -4,26 +4,26 @@ import * as LucideIcons from 'lucide-react';
 import { useState } from 'react';
 
 /**
- * Sidebar — Extension manifest의 sidebar contributions를 자동으로 렌더링
+ * Sidebar — Automatically renders sidebar contributions from Extension manifests.
  */
 export function Sidebar() {
   const items = useSidebarItems();
   const host = useExtensionHost();
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
-  // section별 그룹핑
+  // Group by section
   const sections = groupBy(items, 'section');
 
   async function handleItemClick(item: RegisteredSidebarItem) {
     setActiveItem(item.id);
 
-    // 해당 Extension activate (아직 안 됐으면)
+    // Activate the Extension if not already activated
     await host.ensureActivated(item.extensionId);
 
-    // sidebar select 이벤트 발생
+    // Fire sidebar select event
     host.registry.fireSidebarSelect(item.id);
 
-    // 기본 view 열기
+    // Open default view
     if (item.defaultView) {
       setActiveView(item.defaultView);
     }
@@ -66,7 +66,7 @@ export function Sidebar() {
 }
 
 function getIcon(iconName: string): LucideIcons.LucideIcon {
-  // kebab-case → PascalCase 변환 (layout-grid → LayoutGrid)
+  // Convert kebab-case to PascalCase (layout-grid -> LayoutGrid)
   const pascalCase = iconName
     .split('-')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))

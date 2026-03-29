@@ -23,13 +23,13 @@ interface TaskExecutionPlan {
 }
 
 /**
- * TaskExecutor — AI가 Task를 수행할 때 worktree를 자동으로 생성하고 컨텍스트를 수집
+ * TaskExecutor — Automatically creates worktrees and collects context when AI performs a Task.
  *
- * 흐름:
- * 1. Task의 TASK.md, MATRIX.md 읽기
- * 2. Matrix의 repositories 확인
- * 3. 각 repository에 대해 worktree 생성 (Task 폴더 하위)
- * 4. 생성된 worktree 경로 반환
+ * Flow:
+ * 1. Read the Task's TASK.md and MATRIX.md
+ * 2. Check the Matrix's repositories
+ * 3. Create a worktree for each repository (under the Task folder)
+ * 4. Return the created worktree paths
  */
 export class TaskExecutor {
   async planExecution(matrixId: string, taskId: string): Promise<TaskExecutionPlan> {
