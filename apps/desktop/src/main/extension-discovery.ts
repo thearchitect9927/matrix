@@ -19,14 +19,13 @@ async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
   // Phase 1+ 에서 Extension이 추가되면 여기에 등록
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const helloManifest = require('@matrix/hello-world/manifest.json') as Manifest;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const workspaceManifest = require('@matrix/workspace/manifest.json') as Manifest;
 
   const builtinManifests: Array<{ packageName: string; manifest: Manifest }> = [
-    {
-      packageName: '@matrix/hello-world',
-      manifest: helloManifest,
-    },
-    // Phase 1+ 에서 추가
-    // { packageName: '@matrix/workspace', manifest: ... },
+    { packageName: '@matrix/hello-world', manifest: helloManifest },
+    { packageName: '@matrix/workspace', manifest: workspaceManifest },
+    // Phase 2+ 에서 추가
   ];
 
   return builtinManifests.map(({ packageName, manifest }) => ({

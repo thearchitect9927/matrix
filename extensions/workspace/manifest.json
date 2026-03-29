@@ -1,0 +1,52 @@
+{
+  "id": "matrix:workspace",
+  "name": "Workspace",
+  "version": "0.0.1",
+  "icon": "layout-grid",
+  "description": "Matrix and Source workspace management",
+
+  "contributions": {
+    "sidebar": [
+      {
+        "id": "workspace-home",
+        "section": "workspace",
+        "label": "Home",
+        "icon": "home",
+        "order": 0,
+        "defaultView": "workspace-home"
+      },
+      {
+        "id": "workspace-dashboard",
+        "section": "source",
+        "label": "Dashboard",
+        "icon": "layout-grid",
+        "order": 1,
+        "defaultView": "workspace-dashboard"
+      }
+    ],
+    "views": [
+      {
+        "id": "workspace-home",
+        "area": "main",
+        "label": "Home"
+      },
+      {
+        "id": "workspace-dashboard",
+        "area": "main",
+        "label": "Dashboard"
+      }
+    ],
+    "commands": [
+      {
+        "id": "workspace.create-matrix",
+        "label": "Create Matrix"
+      },
+      {
+        "id": "workspace.add-source",
+        "label": "Add Source"
+      }
+    ]
+  },
+
+  "activationEvents": ["*"]
+}

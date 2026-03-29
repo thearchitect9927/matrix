@@ -1,0 +1,10 @@
+{
+  "name": "@matrix/workspace",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Matrix/Source workspace management extension",
+  "main": "src/browser/frontend.ts",
+  "dependencies": {
+    "@matrix/core": "workspace:*"
+  }
+}

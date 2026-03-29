@@ -68,6 +68,9 @@ importers:
       '@matrix/hello-world':
         specifier: workspace:*
         version: link:../../extensions/hello-world
+      '@matrix/workspace':
+        specifier: workspace:*
+        version: link:../../extensions/workspace
       '@xterm/addon-fit':
         specifier: ^0.11.0
         version: 0.11.0
@@ -173,6 +176,12 @@ importers:
         version: 5.9.3
 
   extensions/hello-world:
+    dependencies:
+      '@matrix/core':
+        specifier: workspace:*
+        version: link:../core
+
+  extensions/workspace:
     dependencies:
       '@matrix/core':
         specifier: workspace:*

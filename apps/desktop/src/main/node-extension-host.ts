@@ -186,8 +186,8 @@ export class NodeExtensionHost {
   private async loadBuiltinModule(packageName: string): Promise<NodeExtensionModule | null> {
     const moduleMap: Record<string, () => Promise<NodeExtensionModule>> = {
       '@matrix/hello-world': () => import('@matrix/hello-world/src/node/backend'),
-      // Phase 1+ 에서 추가
-      // '@matrix/workspace': () => import('@matrix/workspace/src/node/backend'),
+      '@matrix/workspace': () => import('@matrix/workspace/src/node/backend'),
+      // Phase 2+ 에서 추가
     };
 
     const loader = moduleMap[packageName];

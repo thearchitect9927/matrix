@@ -81,8 +81,8 @@ export class BrowserExtensionHost {
     // Vite가 이 패턴을 번들링할 수 있도록 각 Extension을 명시적으로 등록
     const moduleMap: Record<string, () => Promise<BrowserExtensionModule>> = {
       '@matrix/hello-world': () => import('@matrix/hello-world/src/browser/frontend'),
-      // Phase 1+ 에서 추가
-      // '@matrix/workspace': () => import('@matrix/workspace/src/browser/frontend'),
+      '@matrix/workspace': () => import('@matrix/workspace/src/browser/frontend'),
+      // Phase 2+ 에서 추가
       // '@matrix/kanban': () => import('@matrix/kanban/src/browser/frontend'),
       // '@matrix/terminal': () => import('@matrix/terminal/src/browser/frontend'),
     };

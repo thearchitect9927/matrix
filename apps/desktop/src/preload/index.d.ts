@@ -159,6 +159,9 @@ export interface ElectronAPI {
       error?: string;
     }>;
   };
+
+  // Extension IPC bridge
+  invoke: (channel: string, ...args: unknown[]) => Promise<unknown>;
 }
 
 declare global {
