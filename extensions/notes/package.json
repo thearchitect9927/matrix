@@ -4,6 +4,40 @@
   "private": true,
   "description": "Project knowledge management with markdown notes",
   "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:notes",
+    "name": "Notes",
+    "icon": "notebook-pen",
+    "description": "Project knowledge management with markdown",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "notes",
+          "section": "workspace",
+          "label": "Notes",
+          "icon": "notebook-pen",
+          "order": 2,
+          "defaultView": "notes-list"
+        }
+      ],
+      "views": [
+        {
+          "id": "notes-list",
+          "area": "main",
+          "label": "Notes"
+        }
+      ],
+      "commands": [
+        {
+          "id": "notes.create",
+          "label": "Create Note"
+        }
+      ]
+    },
+    "activationEvents": [
+      "onView:notes-list"
+    ]
+  },
   "dependencies": {
     "@matrix/core": "workspace:*",
     "@matrix/workspace": "workspace:*"

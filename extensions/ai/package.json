@@ -4,6 +4,40 @@
   "private": true,
   "description": "AI Agent with full Matrix context access",
   "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:ai",
+    "name": "AI Agent",
+    "icon": "bot",
+    "description": "AI Agent with full Matrix context access",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "ai-chat",
+          "section": "agent",
+          "label": "AI Chat",
+          "icon": "bot",
+          "order": 1,
+          "defaultView": "ai-chat"
+        }
+      ],
+      "views": [
+        {
+          "id": "ai-chat",
+          "area": "main",
+          "label": "AI Chat"
+        }
+      ],
+      "commands": [
+        {
+          "id": "ai.run-task",
+          "label": "Run Task with AI"
+        }
+      ]
+    },
+    "activationEvents": [
+      "onView:ai-chat"
+    ]
+  },
   "dependencies": {
     "@matrix/core": "workspace:*",
     "@matrix/workspace": "workspace:*",

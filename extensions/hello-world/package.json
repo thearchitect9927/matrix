@@ -4,6 +4,40 @@
   "private": true,
   "description": "Test extension for verifying the extension system",
   "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:hello-world",
+    "name": "Hello World",
+    "icon": "hand",
+    "description": "Test Extension for verifying the Extension system",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "hello",
+          "section": "test",
+          "label": "Hello",
+          "icon": "hand",
+          "order": 1,
+          "defaultView": "hello-view"
+        }
+      ],
+      "views": [
+        {
+          "id": "hello-view",
+          "area": "main",
+          "label": "Hello World"
+        }
+      ],
+      "commands": [
+        {
+          "id": "hello.greet",
+          "label": "Say Hello"
+        }
+      ]
+    },
+    "activationEvents": [
+      "onView:hello-view"
+    ]
+  },
   "dependencies": {
     "@matrix/core": "workspace:*"
   }

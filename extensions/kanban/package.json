@@ -4,6 +4,40 @@
   "private": true,
   "description": "Kanban board and Task management extension",
   "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:kanban",
+    "name": "Kanban",
+    "icon": "layout-grid",
+    "description": "Kanban board and Task management",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "kanban",
+          "section": "task",
+          "label": "Kanban",
+          "icon": "layout-grid",
+          "order": 1,
+          "defaultView": "kanban-board"
+        }
+      ],
+      "views": [
+        {
+          "id": "kanban-board",
+          "area": "main",
+          "label": "Kanban Board"
+        }
+      ],
+      "commands": [
+        {
+          "id": "kanban.create-task",
+          "label": "Create Task"
+        }
+      ]
+    },
+    "activationEvents": [
+      "onView:kanban-board"
+    ]
+  },
   "dependencies": {
     "@matrix/core": "workspace:*",
     "@matrix/workspace": "workspace:*"

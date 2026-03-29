@@ -4,6 +4,35 @@
   "private": true,
   "description": "A custom Matrix extension",
   "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "my:extension",
+    "name": "My Extension",
+    "icon": "puzzle",
+    "description": "A custom Matrix extension",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "my-extension",
+          "section": "custom",
+          "label": "My Extension",
+          "icon": "puzzle",
+          "order": 99,
+          "defaultView": "my-view"
+        }
+      ],
+      "views": [
+        {
+          "id": "my-view",
+          "area": "main",
+          "label": "My Extension"
+        }
+      ],
+      "commands": []
+    },
+    "activationEvents": [
+      "onView:my-view"
+    ]
+  },
   "scripts": {
     "build": "node build.js"
   },

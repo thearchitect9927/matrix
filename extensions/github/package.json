@@ -4,6 +4,49 @@
   "private": true,
   "description": "GitHub PR and Issue integration via gh CLI",
   "main": "src/browser/frontend.ts",
+  "matrix": {
+    "id": "matrix:github",
+    "name": "GitHub",
+    "icon": "git-pull-request",
+    "description": "GitHub PR and Issue integration",
+    "contributions": {
+      "sidebar": [
+        {
+          "id": "github-prs",
+          "section": "source",
+          "label": "Pull Requests",
+          "icon": "git-pull-request",
+          "order": 3,
+          "defaultView": "github-prs"
+        },
+        {
+          "id": "github-issues",
+          "section": "source",
+          "label": "Issues",
+          "icon": "circle-dot",
+          "order": 4,
+          "defaultView": "github-issues"
+        }
+      ],
+      "views": [
+        {
+          "id": "github-prs",
+          "area": "main",
+          "label": "Pull Requests"
+        },
+        {
+          "id": "github-issues",
+          "area": "main",
+          "label": "Issues"
+        }
+      ],
+      "commands": []
+    },
+    "activationEvents": [
+      "onView:github-prs",
+      "onView:github-issues"
+    ]
+  },
   "dependencies": {
     "@matrix/core": "workspace:*",
     "@matrix/workspace": "workspace:*"

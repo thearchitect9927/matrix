@@ -12,55 +12,49 @@ export async function discoverExtensions(): Promise<ExtensionInfo[]> {
   return [...builtin, ...user];
 }
 
-/**
- * Builtin extensions: hardcoded list for Vite bundling compatibility
- */
-async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
-  // Register new Extensions here as they are added in Phase 1+
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const helloManifest = require('@matrix/hello-world/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const workspaceManifest = require('@matrix/workspace/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const terminalManifest = require('@matrix/terminal/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const kanbanManifest = require('@matrix/kanban/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const githubManifest = require('@matrix/github/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const gitManifest = require('@matrix/git/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const notesManifest = require('@matrix/notes/manifest.json') as Manifest;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const aiManifest = require('@matrix/ai/manifest.json') as Manifest;
-
-  const builtinManifests: Array<{ packageName: string; manifest: Manifest }> = [
-    { packageName: '@matrix/hello-world', manifest: helloManifest },
-    { packageName: '@matrix/workspace', manifest: workspaceManifest },
-    { packageName: '@matrix/terminal', manifest: terminalManifest },
-    { packageName: '@matrix/kanban', manifest: kanbanManifest },
-    { packageName: '@matrix/github', manifest: githubManifest },
-    { packageName: '@matrix/git', manifest: gitManifest },
-    { packageName: '@matrix/notes', manifest: notesManifest },
-    { packageName: '@matrix/ai', manifest: aiManifest },
-  ];
-
-  return builtinManifests.map(({ packageName, manifest }) => ({
-    manifest,
-    builtin: true,
-    path: '', // Builtin extensions are included in the bundle, so path is not needed
-    packageName,
-  }));
+interface PackageJsonWithMatrix {
+  matrix?: Manifest;
 }
 
-// Scan user-installed extensions from Electron userData directory
+/**
+ * Builtin extensions: reads the "matrix" field from each package.json.
+ * Hardcoded list for Vite bundling compatibility.
+ */
+async function scanBuiltinExtensions(): Promise<ExtensionInfo[]> {
+  /* eslint-disable @typescript-eslint/no-require-imports */
+  const packages: Array<{ packageName: string; pkg: PackageJsonWithMatrix }> = [
+    { packageName: '@matrix/hello-world', pkg: require('@matrix/hello-world/package.json') },
+    { packageName: '@matrix/workspace', pkg: require('@matrix/workspace/package.json') },
+    { packageName: '@matrix/terminal', pkg: require('@matrix/terminal/package.json') },
+    { packageName: '@matrix/kanban', pkg: require('@matrix/kanban/package.json') },
+    { packageName: '@matrix/github', pkg: require('@matrix/github/package.json') },
+    { packageName: '@matrix/git', pkg: require('@matrix/git/package.json') },
+    { packageName: '@matrix/notes', pkg: require('@matrix/notes/package.json') },
+    { packageName: '@matrix/ai', pkg: require('@matrix/ai/package.json') },
+  ];
+  /* eslint-enable @typescript-eslint/no-require-imports */
+
+  return packages
+    .filter(({ pkg }) => pkg.matrix)
+    .map(({ packageName, pkg }) => ({
+      manifest: pkg.matrix!,
+      builtin: true,
+      path: '',
+      packageName,
+    }));
+}
+
+/**
+ * Scan user-installed extensions from Electron userData directory.
+ * Reads the "matrix" field from each extension's package.json.
+ */
 async function scanUserExtensions(): Promise<ExtensionInfo[]> {
   const extensionsDir = path.join(app.getPath('userData'), 'extensions');
 
   try {
     await fs.access(extensionsDir);
   } catch {
-    return []; // Return empty list if extensions directory doesn't exist
+    return [];
   }
 
   const dirs = await fs.readdir(extensionsDir, { withFileTypes: true });
@@ -69,18 +63,20 @@ async function scanUserExtensions(): Promise<ExtensionInfo[]> {
   for (const dir of dirs) {
     if (!dir.isDirectory()) continue;
 
-    const manifestPath = path.join(extensionsDir, dir.name, 'manifest.json');
+    const pkgPath = path.join(extensionsDir, dir.name, 'package.json');
     try {
-      const content = await fs.readFile(manifestPath, 'utf-8');
-      const manifest = JSON.parse(content) as Manifest;
-      extensions.push({
-        manifest,
-        builtin: false,
-        path: path.join(extensionsDir, dir.name),
-        packageName: dir.name,
-      });
+      const content = await fs.readFile(pkgPath, 'utf-8');
+      const pkg = JSON.parse(content) as PackageJsonWithMatrix;
+      if (pkg.matrix) {
+        extensions.push({
+          manifest: pkg.matrix,
+          builtin: false,
+          path: path.join(extensionsDir, dir.name),
+          packageName: dir.name,
+        });
+      }
     } catch {
-      console.warn(`Invalid extension manifest: ${manifestPath}`);
+      console.warn(`Invalid extension package.json: ${pkgPath}`);
     }
   }
 
