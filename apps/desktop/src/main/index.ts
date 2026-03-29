@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
 import { setupDialogHandlers } from './dialogs';
+// Legacy Python IPC — kept for backward compatibility during migration
+// TODO: Remove after all features migrated to Extension IPC
 import { setupIPCHandlers } from './ipc';
 import { setupSystemCheckHandlers } from './system-check';
 import { setupTerminalHandlers } from './terminal-manager';
