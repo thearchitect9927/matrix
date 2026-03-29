@@ -33,3 +33,6 @@ export type {
   BrowserExtensionModule,
   NodeExtensionModule,
 } from './types';
+
+// Testing utilities
+export { createMockBrowserAPI, createMockNodeAPI, createMockContext } from './testing';

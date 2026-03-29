@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Task, KanbanBoard as KanbanBoardType, TaskStatus } from '../common/types';
+import { KanbanColumn } from './KanbanColumn';
 
 const COLUMNS: { id: TaskStatus; label: string }[] = [
   { id: 'todo', label: 'To Do' },
@@ -48,6 +49,15 @@ export function KanbanBoard() {
     }
   };
 
+  const handleCardDrop = async (taskId: string, targetColumn: TaskStatus) => {
+    try {
+      await window.api.invoke('kanban:task:move', matrixId, taskId, targetColumn);
+      await fetchData();
+    } catch (err) {
+      console.error('Failed to move task:', err);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -79,25 +89,13 @@ export function KanbanBoard() {
 
       <div className="flex flex-1 gap-4 overflow-x-auto">
         {COLUMNS.map((col) => (
-          <div key={col.id} className="flex w-72 flex-shrink-0 flex-col">
-            <div className="mb-3 flex items-center gap-2">
-              <h3 className="text-sm font-medium text-white/60">{col.label}</h3>
-              <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/40">
-                {getTasksForColumn(col.id).length}
-              </span>
-            </div>
-
-            <div className="flex flex-1 flex-col gap-2">
-              {getTasksForColumn(col.id).map((task) => (
-                <div
-                  key={task.id}
-                  className="rounded-lg border border-white/10 bg-white/5 p-3 text-sm text-white/80"
-                >
-                  {task.title}
-                </div>
-              ))}
-            </div>
-          </div>
+          <KanbanColumn
+            key={col.id}
+            id={col.id}
+            label={col.label}
+            tasks={getTasksForColumn(col.id)}
+            onCardDrop={handleCardDrop}
+          />
         ))}
       </div>
     </div>

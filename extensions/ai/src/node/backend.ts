@@ -1,6 +1,9 @@
 import { ipcMain } from 'electron';
 import type { MatrixNodeAPI, ExtensionContext } from '@matrix/core';
 import { getBuiltinTools } from './tool-registry';
+import { AgentService } from './agent-service';
+
+const agentService = new AgentService();
 
 export function activate(_api: MatrixNodeAPI, _context: ExtensionContext): void {
   ipcMain.handle('ai:tools:list', async () => {
@@ -14,9 +17,16 @@ export function activate(_api: MatrixNodeAPI, _context: ExtensionContext): void 
     if (!tool) throw new Error(`Tool not found: ${toolId}`);
     return tool.handler(args);
   });
+
+  ipcMain.handle('ai:context:build', async (_e, matrixId: string, taskId?: string) => {
+    return agentService.buildContext(matrixId, taskId);
+  });
 }
 
 export function deactivate(): void {
   ipcMain.removeHandler('ai:tools:list');
   ipcMain.removeHandler('ai:tool:execute');
+  ipcMain.removeHandler('ai:context:build');
 }
+
+export { agentService, AgentService };
